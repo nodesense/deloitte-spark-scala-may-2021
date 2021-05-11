@@ -1,4 +1,4 @@
-object C22_ClassInheritance extends  App {
+object S22_ClassInheritance extends  App {
   // Inheritance is basically to reuse class implementation
   // so that we don't need to repeat code again
   class Product(val name: String, val price: Double, protected var discount: Double) {
