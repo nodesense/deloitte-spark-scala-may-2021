@@ -32,11 +32,9 @@ start the spark shell with specific requirements..
 
 spark-shell --master spark://192.168.1.110:7077 --driver-memory 6G --executor-memory 4G --executor-cores 2
 
-
 Check the port numbers on console for Web UI,
 
 Copy paste code below
-
 
 val rdd = sc.parallelize ( 1 to 10)
 
