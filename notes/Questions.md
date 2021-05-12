@@ -11,6 +11,7 @@ how are the number of tasks calculated within spark - app?
 How many spark-shell we can open at once ?
 can we perform agg transform like finding max value from a RDD?
 
+Can u please show how to create multiple spark sessions after this ?
 
 
 memory configuration is not working for me, getting below error:
