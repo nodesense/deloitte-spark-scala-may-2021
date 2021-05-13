@@ -16,7 +16,8 @@ object ZipCodeCaseClass extends  App {
 
   val textFile = sc.textFile("file:///c:/data/zipcodes.csv")
 
-  case class ZipCode (area: String, pincode: String, state: String)
+  // Domain objects
+  case class ZipCode (area: String, pincode: Int, state: String)
 
   val header = textFile.first()
 
@@ -24,8 +25,8 @@ object ZipCodeCaseClass extends  App {
                          .map(line => line.trim()) // remove all white space around
                          .filter(line => !line.isEmpty) // no emply line
                          .map(line => line.split(","))
-                         .map(arr => ZipCode(arr(0), arr(1), arr(2))) // create object
-                          .filter (zipCode => zipCode.state == "TN")
+                         .map(arr => ZipCode(arr(0), arr(1).toInt, arr(2))) // create object
+                          .filter (zipCode => zipCode.pincode == 560001)
 
   pincodes.foreach(println)
 
