@@ -47,6 +47,8 @@ object PartitionBy_HashPartition extends  App {
   println("partitions ", rdd3.getNumPartitions)
 
   // collect data from paritions
+  // glom collect data to driver
+  // blocking call
   val partitionData = rdd3.glom()
 
 
@@ -60,6 +62,26 @@ object PartitionBy_HashPartition extends  App {
   // action, create a task, execute stages, tasks
   partitionData.foreach(data => printData(data) )
 
-  println("Press any key to exit")
-  scala.io.StdIn.readLine()
+
+  // to process data per partitition
+
+  rdd3.foreachPartition(partition => {
+    // this code shall run in the worker node, task
+    // paralling processing applied
+
+    val result   = new scala.collection.mutable.ArrayBuffer[(String, UsZipCode)]()
+    partition.foreach( data => {
+      result += data
+    })
+
+    println("---Part --------begin")
+    println(result.toList)
+    println("---Part --------end")
+    // process the record in the partition, like
+    // storing to database
+  })
+
+
+  // println("Press any key to exit")
+  // scala.io.StdIn.readLine()
 }

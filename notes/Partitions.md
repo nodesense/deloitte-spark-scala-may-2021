@@ -130,3 +130,11 @@ P2:
 .filter ( data => data.state = 'MA')
 (MA,UsZipCode(01001,Agawam,MA,HAMPDEN,,42.140549,42.140549))
 (MA,UsZipCode(01002,Amherst,MA,HAMPSHIRE,,42.367092,42.367092))
+
+MAX PARTTITION = 3
+hashcode("MA") = 7  
+                partition = hashcode % max paritition
+                    partition       = 7 % 3 = 1
+
+hashCode("NY") = 4  
+                partition        4 % 3 = 1   
