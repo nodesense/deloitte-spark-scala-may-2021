@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession
 
 object PartitionBy_HashPartition extends  App {
   val spark:SparkSession = SparkSession.builder()
-    .master("local[4]") // [x] is a number of parallel task, same used for default partititon
+    .master("local[2]") // [x] is a number of parallel task, same used for default partititon
     .appName("SparkByExample")
     .getOrCreate()
 
@@ -25,7 +25,7 @@ object PartitionBy_HashPartition extends  App {
   // by default 2 paritions
   val textFile = sc.textFile("file:///C://data//all_us_zipcodes.csv")
 
-  val header = textFile.first()
+  val header = textFile.first() // action, create a task, execute stages, tasks
   println("textFile partitions ", textFile.getNumPartitions)
 
   val rdd2:RDD[Array[String]] = textFile.map(line => line.trim()) // remove all white space around
@@ -38,7 +38,8 @@ object PartitionBy_HashPartition extends  App {
   val rdd3 = rdd2.map(arr => UsZipCode(arr(0),arr(1), arr(2),
     arr(3), arr(4), arr(5), arr(6))   )
     .map (zipCode => (zipCode.state, zipCode) ) // making key/value pair rdd
-    .partitionBy(new HashPartitioner(50)) // 3 max partitions
+    .partitionBy(new HashPartitioner(5)) // 3 max partitions
+
   // key shall be used for parition
 
 
@@ -48,10 +49,17 @@ object PartitionBy_HashPartition extends  App {
   // collect data from paritions
   val partitionData = rdd3.glom()
 
+
+  // (1,10) => Tuple2[Int, Int]
+  // Tuple2[String, UsZipCode] == (String, UsZipCode)
   def printData(list: Array[Tuple2[String, UsZipCode]]) = {
     println("------------")
     list.foreach(println)
   }
 
+  // action, create a task, execute stages, tasks
   partitionData.foreach(data => printData(data) )
+
+  println("Press any key to exit")
+  scala.io.StdIn.readLine()
 }
