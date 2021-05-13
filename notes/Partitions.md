@@ -103,3 +103,30 @@ P2 : [7,8]
 4 core system - 4 task at a time
 
     once  task is completed, pick another taks from queue, assign to executor core..
+------
+
+HashParition - works based on key by default 
+State is a key, 
+
+NY, 1234
+OH, 3456
+NY, 1256
+CO, 5678
+----
+
+PartitionBy (HashPartition (3))
+hashCode(NY) %  3 = 0 or 1 or 2 parition number
+P0: [ (NY, 1234), (NY, 1256)]
+P1: [ (OH, 3456), (CO, 5678), (OH, 3489),]
+P2: 
+
+
+(WV,UsZipCode(24935,Forest Hill,WV,SUMMERS,,37.648541,37.648541))
+(WV,UsZipCode(24936,Fort Spring,WV,GREENBRIER,,37.975595,37.975595))
+(NY,UsZipCode(00544,Holtsville,NY,SUFFOLK,,40.922326,40.922326))
+(MA,UsZipCode(01001,Agawam,MA,HAMPDEN,,42.140549,42.140549))
+(MA,UsZipCode(01002,Amherst,MA,HAMPSHIRE,,42.367092,42.367092))
+
+.filter ( data => data.state = 'MA')
+(MA,UsZipCode(01001,Agawam,MA,HAMPDEN,,42.140549,42.140549))
+(MA,UsZipCode(01002,Amherst,MA,HAMPSHIRE,,42.367092,42.367092))

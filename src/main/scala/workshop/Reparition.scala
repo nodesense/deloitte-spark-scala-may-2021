@@ -4,7 +4,7 @@ import org.apache.spark.HashPartitioner
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
-object PartitionBy extends  App {
+object Reparition extends  App {
   val spark:SparkSession = SparkSession.builder()
     .master("local[4]") // [x] is a number of parallel task, same used for default partititon
     .appName("SparkByExample")
@@ -25,12 +25,15 @@ object PartitionBy extends  App {
   val textFile = sc.textFile("file:///C://data//all_us_zipcodes.csv")
 
   val header = textFile.first()
+  println("textFile partitions ", textFile.getNumPartitions)
 
   val rdd2:RDD[Array[String]] = textFile.map(line => line.trim()) // remove all white space around
                                         .filter(line => !line.isEmpty)
                                         .filter (line => line != header)
-
-                                    .map(m=>m.split(","))
+                                        // create  6 partitions, move the data to 6 partitions
+                                        .repartition(6)
+                                        .map(m=>m.split(","))
+                                        .filter(arr=> arr.length == 7)
 
   //println(rdd2.first().toList)
   val rdd3 = rdd2.map(arr => UsZipCode(arr(0),arr(1), arr(2),
@@ -42,5 +45,10 @@ object PartitionBy extends  App {
   // collect data from paritions
   val partitionData = rdd3.glom()
 
-  partitionData.foreach(data => println(data.toList))
+  def printData(list: Array[UsZipCode]) = {
+    println("------------")
+    list.foreach(println)
+  }
+
+  partitionData.foreach(data => printData(data) )
 }
